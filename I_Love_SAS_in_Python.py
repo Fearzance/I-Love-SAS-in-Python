@@ -10,17 +10,14 @@ Created on Sun Apr  3 19:13:55 2022
 #=====================================================================================
 
 import sys 
-sys.path.append(r"C:\Users\alexa\Desktop\I Love SAS in Python\code_python_traducteur_draft\Programmes mémoire")
+sys.path.append(r"C:\Users\kevin\Documents\Mémoire\Mémoire M2\2_Programmes")
 
 from Fonctions import tab_out, tab_in
-from options_data import data_drop, data_keep, data_rename, data_where, data_if
+from test import data_drop, data_keep, data_rename, data_where, data_if
 
-code = """    DATA table_1                  ;    set table  ;
+code = """    DATA test2                  ;    set table  ;
 rename name=nom height=taille weight=poids;
-keep prix vente moy ;
-DROp age sex var3   var4;
-where age > 30          ;
-if sex = 'female' then sexe= 'femme' ; else if  sex = 'male' then sexe = 'homme';
+if age<=30 then sexe = 1 ; else if  age = 40 then sexe = 2; else sexe = 3;
 run;
 """
 def data(code):
@@ -98,21 +95,13 @@ def data(code):
             resultat = data_if(1,code)
     
     resultat = resultat.replace("first table", entree_tab)
-    resultat = resultat.replace("not table", sortie_tab)
-    return(resultat)
+    resultat = resultat.replace("not first table", sortie_tab)
+    return resultat
 
 result = data(code)
 print(result)
     
-code = """    DATA table_1                  ;    set table  ;
-rename name=nom height=taille weight=poids;
-keep prix vente moy ;
-DROp age sex var3   var4;
-where age > 30  and sexe = 'female'        ;
-if sex = 'female' then sexe= 'femme' ; else if  sex = 'male' then sexe = 'homme'; else sexe = 'inconnu';
-run;
-"""
-code = """    DATA table_1                  ;    set table  ;
+code = """    DATA table5                 ;    set table2 ;
 rename name=nom height=taille weight=poids;
 keep prix vente moy ;
 DROp age sex var3   var4;

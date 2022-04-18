@@ -9,7 +9,6 @@ def substr(code):
 
     entree = tab_in(code)
     sortie = tab_out(code)
-    
     word = code.lower().split(";")
 
     #S'il y a la fonction substr, il va récupèrer les idfférents paramètres de la fonction
@@ -31,6 +30,7 @@ def substr(code):
             else:
                 length = ""
     
+    #Si dans la fonction substr la position n = 1 alors n = 0 
     if N == '1' and (entree==sortie):
         resultat = "\n"  
         resultat += sortie + '["' + new_var + '"] = ' + entree + '["' + old_var + '"].str[:'+ length +']'
@@ -43,20 +43,18 @@ def substr(code):
         
     
     if N != '1' and (entree==sortie):
-        num =int(N)-1
-        N = str(num)
+        N =str(int(N)-1)
         resultat = "\n"  
         resultat += sortie + '["' + new_var + '"] = ' + entree + '["' + old_var + '"].str[' + N +':'+ length +']'
         
     if N != '1' and entree != sortie:
-        num =int(N)-1
-        N = str(num)
+        N =str(int(N)-1)
         resultat = ""
         resultat += sortie + '=' + entree + '.copy()\n'
         resultat += sortie + '["' + new_var + '"] = ' + entree + '["' + old_var + '"].str[' + N + ':' + length +']'
 
     return resultat
 
-print(substr("""DATA table1;set table0;
-             new_name = substr(name,3);
+print(substr("""DATA table1;set table2;
+             new_name = substr(prénom,5,8);
              run;"""))
