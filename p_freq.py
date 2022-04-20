@@ -4,14 +4,14 @@ Created on Tue Apr 19 09:35:11 2022
 
 @author: alexa
 """
+
 code = """  proc freq   data = class ;
-table sex*age  ;
+table sex  ;
 run;
 """
+
 def proc_freq(code):
-    code2 = code.lower()
-    word = code.lower().split(";")
-    
+    word = code.lower().split(";")    
     #Enlève les espaces pour chaque éléments de words
     for i in range(0,len(word)):
           word[i] = word[i].strip()
@@ -23,12 +23,15 @@ def proc_freq(code):
             test = test.split("=")
             tab = test[-1]
             table = tab.strip()
+      
             
+    #Récupère les variables concernées par le freq        
     for elem in word:
         if elem.startswith("table"):
             var = elem[5:]
             var_freq = var.strip()
-    
+          
+    #Table de contingence?
     if "*" not  in var_freq:
         resultat1 = ""
         resultat1 += "datax =" + table +"['" +var_freq +"']" +".value_counts(dropna = False)" +"\n" + "datay = pandas.DataFrame({'"+var_freq + "': datax.index, 'Frequency': datax.values,'Percent': ((datax.values/datax.values.sum())*100).round(2),'Cumulative Frequency': datax.values.cumsum(),'Cumulative Percent': ((datax.values.cumsum()/datax.values.sum())*100).round(2)})"
@@ -42,4 +45,3 @@ def proc_freq(code):
     
 print(proc_freq(code))
 
- 
