@@ -22,7 +22,7 @@ import sys
 #------------------------------------------------------------------------
 sys.path.append(r"C:\Users\kevin\Documents\Mémoire\Mémoire M2\2_Programmes")
 
-from Functions_analyzer2 import data_drop, data_keep, data_rename, data_where, data_if, tab_out, tab_in, translator 
+from Functions_analyzer import data_drop, data_keep, data_rename, data_where, data_if, tab_out, tab_in, translator 
 
 
 
