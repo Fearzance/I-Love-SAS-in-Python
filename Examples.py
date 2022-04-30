@@ -124,18 +124,42 @@ print(translator("""
 # EXAMPLES FOR PROC STATEMENT
 #============================
 
+#----------------------------
 # Example with for PROC FREQ
+#----------------------------
 
+print(proc_freq("""
+                proc freq   data = class ;
+                table sex  ;
+                run;
+                """))
+                
+#Example with contingency table
 print(proc_freq("""
                 proc freq   data = class ;
                 table sex*age  ;
                 run;
                 """))
                 
+#----------------------------
 # Example with for PROC MEANS
+#----------------------------
+print(proc_means("""
+                 proc means   data = cars  ;
+                 var invoice age ;
+                 run;
+                 """))
+#Example with class 
+print(proc_means("""
+                 proc means   data = cars  ;
+                 class model ;
+                 var invoice age ;
+                 run;
+                 """))
+#Example with nmiss
 print(proc_means("""
                  proc means   data = cars nmiss ;
-                 class model ;
+                 class model;
                  var invoice age ;
                  run;
                  """))
