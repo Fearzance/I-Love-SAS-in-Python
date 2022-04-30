@@ -4,9 +4,8 @@ Created on Tue Apr 19 09:35:11 2022
 
 @author: alexa
 """
-
 code = """  proc freq   data = class ;
-table sex  ;
+table sex*age  ;
 run;
 """
 
@@ -40,8 +39,26 @@ def proc_freq(code):
     else:
         cross_var = var_freq.split("*")
         resultat2 = ""
-        resultat2 += "print(pandas.crosstab(" + table + "['" + cross_var[0] + "']," +table + "['" + cross_var[1] + "'], margins=True, margins_name='Total'))"
+        resultat2 += """
+def frequency(ds, vars):
+    if len(vars) > 1:
+        c1 = ds[vars[0]]
+        c2 = []
+        for i in range(1,len(vars)):
+            c2.append(ds[vars[i]])
+        dfs = []
+        dfs.append(pd.crosstab(c1,c2).unstack().reset_index().rename(columns={0:'Count'}))
+        dfs.append(pd.crosstab(c1,c2, normalize='all').unstack().reset_index().rename(columns={0:'Percent'}))
+        dfs.append(pd.crosstab(c1,c2, normalize='columns').unstack().reset_index().rename(columns={0:'Column Percent'}))
+        dfs.append(pd.crosstab(c1,c2, normalize='index').unstack().reset_index().rename(columns={0:'Row Percent'}))
+        dfs = [df.set_index(vars) for df in dfs]
+        df = dfs[0].join(dfs[1:]).reset_index()
+        return df
+            """
+        resultat2 += "\n" +"frequency(" + table + ",['"+ "','".join(cross_var) + "'])"    
         return(resultat2)
     
 print(proc_freq(code))
+
+
 

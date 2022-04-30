@@ -20,15 +20,15 @@ import sys
 #------------------------------------------------------------------------
 # Put your path in order to access the python programs Functions_analyzer
 #------------------------------------------------------------------------
-sys.path.append(r"C:\Users\kevin\Documents\Mémoire\Mémoire M2\2_Programmes")
+sys.path.append(r"C:\Users\alexa\Desktop\I Love SAS in Python\code_python_traducteur_draft\Programmes mémoire")
 
-from Functions_analyzer import data_drop, data_keep, data_rename, data_where, data_if, tab_out, tab_in, translator 
+from Functions_analyzer import data_drop, data_keep, data_rename, data_where, data_if, tab_out, tab_in, translator, proc_freq,proc_means 
 
 
 
-#=========
-# EXAMPLES
-#=========
+#============================
+# EXAMPLES FOR DATA STATEMENT
+#============================
 
 # Example with DROP statement
 print(translator("""
@@ -120,3 +120,22 @@ print(translator("""
                 RUN;
                 """))
 
+#============================
+# EXAMPLES FOR PROC STATEMENT
+#============================
+
+# Example with for PROC FREQ
+
+print(proc_freq("""
+                proc freq   data = class ;
+                table sex*age  ;
+                run;
+                """))
+                
+# Example with for PROC MEANS
+print(proc_means("""
+                 proc means   data = cars nmiss ;
+                 class model ;
+                 var invoice age ;
+                 run;
+                 """))
