@@ -128,14 +128,14 @@ print(translator("""
 # Example with for PROC FREQ
 #----------------------------
 
-print(proc_freq("""
+print(translator("""
                 proc freq   data = class ;
                 table sex  ;
                 run;
                 """))
                 
 #Example with contingency table
-print(proc_freq("""
+print(translator("""
                 proc freq   data = class ;
                 table sex*age  ;
                 run;
@@ -144,20 +144,20 @@ print(proc_freq("""
 #----------------------------
 # Example with for PROC MEANS
 #----------------------------
-print(proc_means("""
+print(translator("""
                  proc means   data = cars  ;
                  var invoice age ;
                  run;
                  """))
 #Example with class 
-print(proc_means("""
+print(translator("""
                  proc means   data = cars  ;
                  class model ;
                  var invoice age ;
                  run;
                  """))
 #Example with nmiss
-print(proc_means("""
+print(translator("""
                  proc means   data = cars nmiss ;
                  class model;
                  var invoice age ;

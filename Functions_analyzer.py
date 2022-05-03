@@ -15,7 +15,7 @@ Created on Wed Apr 20 19:21:56 2022
 #==========================
 def tab_out(code):
     word = code.lower().split(";")
-
+    sortie_tab = ""
     #Separate the code into list and put everything in lowercase
     for i in range(0,len(word)):
           word[i] = word[i].strip()
@@ -32,7 +32,7 @@ def tab_out(code):
 #==========================
 def tab_in(code):
     word = code.lower().split(";")
-
+    entree_tab = ""
     #Separate the code into list and put everything in lowercase
     for i in range(0,len(word)):
           word[i] = word[i].strip()
@@ -531,7 +531,8 @@ def translator(code):
     option_rename = 0
     option_where = 0
     option_substr = 0
-    
+    proc = 0
+
     
     word = code.lower().split(";")
     
@@ -564,6 +565,9 @@ def translator(code):
     
     if "substr" in code:
         option_substr = 1
+        
+    if "proc" in code:
+        proc = 1
     
     
     if option_drop == 1:
@@ -603,6 +607,15 @@ def translator(code):
             resultat = resultat + "\n" + substr(2,code)
         else:
             resultat = substr(1,code)
+    
+    if proc == 1:
+        if "means" in code:
+            resultat = proc_means(code)
+        elif "freq" in code:
+            resultat = proc_freq(code)
+    
+    if (proc == 0 and option_drop ==0 and option_keep ==0 and option_where ==0 and option_rename==0 and option_substr ==0 and option_if ==0):
+        resultat = sortie_tab + "=" + entree_tab + ".copy()"
     
     resultat = resultat.replace("first", entree_tab)
     resultat = resultat.replace("last", sortie_tab)
