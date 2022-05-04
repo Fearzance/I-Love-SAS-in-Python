@@ -20,7 +20,7 @@ import sys
 #------------------------------------------------------------------------
 # Put your path in order to access the python programs Functions_analyzer
 #------------------------------------------------------------------------
-sys.path.append(r"C:\Users\alexa\Desktop\I Love SAS in Python\code_python_traducteur_draft\Programmes mémoire")
+sys.path.append(r"C:\Users\kevin\Documents\Mémoire\Mémoire M2\2_Programmes")
 
 from Functions_analyzer import data_drop, data_keep, data_rename, data_where, data_if, tab_out, tab_in, translator, proc_freq,proc_means 
 
@@ -36,16 +36,31 @@ print(translator("""
                  drop age sex name;
                  Run;"""))
 
+print(translator("""
+                 Data table_1; set table_1;
+                 drop age sex name;
+                 Run;"""))
+
 # Example with KEEP statement
 print(translator("""
                  Data table_1; set table_0;
                  keep age sex name;
                  Run;"""))
                  
+print(translator("""
+                 Data table_1; set table_1;
+                 keep age sex name;
+                 Run;"""))
+                 
 # Example with WHERE statement
 print(translator("""
                  Data table_1; set table_0;
-                 where age>=10;
+                 where age=10;
+                 Run;"""))
+
+print(translator("""
+                 Data table_1; set table_1;
+                 where age>10;
                  Run;"""))
 
 print(translator("""
@@ -54,8 +69,8 @@ print(translator("""
                  Run;"""))
                  
 print(translator("""
-                 Data table_1; set table_1;
-                 where name="val-de-marne" and population=100000;
+                 Data table_1; set table_0;
+                 where name="val-de-marne" and population<=100000;
                  Run;"""))
                  
 # Example with IF - ELSE IF - ELSE statement
@@ -89,9 +104,15 @@ print(translator("""
                  Run;
                  """))
                  
-# Example with RENAME statement
 print(translator("""
                  Data table_1; set table_0;
+                 if sex = "female" ; 
+                 Run;
+                 """))
+                 
+# Example with RENAME statement
+print(translator("""
+                 Data table_1; set table_1;
                  rename name=nom height=taille weight=poids;
                  Run;
                  """))
@@ -120,13 +141,13 @@ print(translator("""
                 RUN;
                 """))
 
-#============================
-# EXAMPLES FOR PROC STATEMENT
-#============================
+#========================
+# EXAMPLES WITH PROC STEP
+#=========================
 
-#----------------------------
-# Example with for PROC FREQ
-#----------------------------
+#------------------------
+# Example with PROC FREQ
+#------------------------
 
 print(translator("""
                 proc freq   data = class ;
@@ -141,9 +162,9 @@ print(translator("""
                 run;
                 """))
                 
-#----------------------------
-# Example with for PROC MEANS
-#----------------------------
+#--------------------------
+# Example with  PROC MEANS
+#--------------------------
 print(translator("""
                  proc means   data = cars  ;
                  var invoice age ;
