@@ -791,7 +791,9 @@ def translator(code):
         elif "freq" in code:
             resultat = proc_freq(code)
             
-    if (proc == 0 and option_drop ==0 and option_keep ==0 and option_where ==0 and option_rename==0 and option_substr ==0 and option_if ==0):
+    if proc == 0 and option_drop ==0 and option_keep ==0 and option_where ==0 and option_rename==0 and option_substr ==0 and option_if ==0:
+        sortie_tab = tab_out(code)
+        entree_tab = tab_in(code)
         resultat = sortie_tab + "=" + entree_tab + ".copy()"
     
     return resultat
