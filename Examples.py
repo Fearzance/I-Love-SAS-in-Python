@@ -184,3 +184,7 @@ print(translator("""
                  var invoice age ;
                  run;
                  """))
+                 
+print (translator("""
+                  data test; set test2;
+                  run;"""))
