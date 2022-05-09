@@ -95,7 +95,7 @@ def data_where(first,code):
     word = code.lower().split(";")
     
     #Remove spaces for each element of words
-    for i in range(0,len(word)):
+    for i in range(0,len(word)-1):
           word[i] = word[i].strip()
     
     #Retrieve variables from where statement
@@ -133,6 +133,9 @@ def data_where(first,code):
     
     elif 'and' not in var and 'or' not in var:
         chaine_var_0 = var.strip()
+        if 'ne' in chaine_var_0:
+            chaine_var = chaine_var_0.split("ne")
+            signe = '!='
         if '<' in chaine_var_0:
             chaine_var = chaine_var_0.split("<")
             signe = '<'
@@ -173,6 +176,9 @@ def data_where(first,code):
         if 'and' in var or 'or' in var:                     
                 
                 chaine_var_0 = list_var[0].strip()
+                if 'ne' in chaine_var_0:
+                    chaine_var = chaine_var_0.split("ne")
+                    signe = '!='
                 if '<' in chaine_var_0:
                     chaine_var = chaine_var_0.split("<")
                     signe = '<'
@@ -190,6 +196,9 @@ def data_where(first,code):
                     signe = '>='
                     
                 chaine_var_1 = list_var[1].strip()
+                if 'ne' in chaine_var_1:
+                    chaine_var2 = chaine_var_1.split("ne")
+                    signe2 = '!='
                 if '<' in chaine_var_1:
                     chaine_var2 = chaine_var_1.split("<")
                     signe2 = '<'
@@ -341,6 +350,9 @@ def data_if(first,code):
     for i in range(0,len(list_var)-1):
         list_var[i] = list_var[i].strip()
         chaine_var_0 = list_var[0].strip()
+        if 'ne' in chaine_var_0:
+            chaine_var = chaine_var_0.split("ne")
+            signe = '!='
         if '<' in chaine_var_0:
             chaine_var = chaine_var_0.split("<")
             signe = '<'
@@ -383,6 +395,9 @@ def data_if(first,code):
                 return resultat1_1
         else:
             chaine_var_0 = var_if.strip()
+            if 'ne' in chaine_var_0:
+                chaine_var = chaine_var_0.split("ne")
+                signe = '!='
             if '<' in chaine_var_0:
                 chaine_var = chaine_var_0.split("<")
                 signe = '<'
@@ -419,6 +434,9 @@ def data_if(first,code):
                 var_else_if = elem[4:]
                 list_var_else_if =var_else_if.split("then")
                 chaine_var_else_if_0 = list_var_else_if[0].strip()
+                if 'ne' in chaine_var_else_if_0:
+                    chaine_var_else_if = chaine_var_else_if_0.split("ne")
+                    signe_elif = '!='
                 if '<' in chaine_var_else_if_0:
                     chaine_var_else_if = chaine_var_else_if_0.split("<")
                     signe_elif = '<'
