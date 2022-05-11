@@ -128,7 +128,7 @@ def data_where(first,code):
             return resultat_0
         else:
             resultat_1 = '\n'
-            resultat_1 += sortie_tab + "=" + entree_tab + "[" + entree_tab + "['" + var1 + "'].isin("+ modalite1 + ")]"
+            resultat_1 += sortie_tab + "=" + sortie_tab + "[" + sortie_tab + "['" + var1 + "'].isin("+ modalite1 + ")]"
             return resultat_1
     
     elif 'and' not in var and 'or' not in var:
@@ -162,7 +162,7 @@ def data_where(first,code):
             return resultat_0
         else:
             resultat_1 = '\n'
-            resultat_1 += sortie_tab + "=" + entree_tab + "[" + entree_tab + "['"+var1+"']" + signe + modalite1 +"]"
+            resultat_1 += sortie_tab + "=" + sortie_tab + "[" + sortie_tab + "['"+var1+"']" + signe + modalite1 +"]"
             return resultat_1
             
         
@@ -229,7 +229,7 @@ def data_where(first,code):
                     
                     else:
                         resultat_1 = '\n'
-                        resultat_1 += sortie_tab + "=" + entree_tab + "[(" + entree_tab + "['"+var1+"']" + signe + modalite1 + ") & (" + entree_tab +"['"+var2+"']" + signe2 +  modalite2 +")]"
+                        resultat_1 += sortie_tab + "=" + sortie_tab + "[(" + sortie_tab + "['"+var1+"']" + signe + modalite1 + ") & (" + entree_tab +"['"+var2+"']" + signe2 +  modalite2 +")]"
                         return resultat_1
                 
                 elif 'or' in var:
@@ -241,7 +241,7 @@ def data_where(first,code):
                     
                     else:
                         resultat_1 = '\n'
-                        resultat_1 += sortie_tab + "=" + entree_tab + "[(" + entree_tab + "['"+var1+"']" + signe + modalite1 + ") | (" + entree_tab +"['"+var2+"']" + signe2 +  modalite2 +")]"
+                        resultat_1 += sortie_tab + "=" + sortie_tab + "[(" + sortie_tab + "['"+var1+"']" + signe + modalite1 + ") | (" + entree_tab +"['"+var2+"']" + signe2 +  modalite2 +")]"
                         return resultat_1
 
 
