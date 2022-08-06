@@ -224,19 +224,21 @@ def translator(code):
         word[i] = word[i].strip()
     
     #Loop that retrieves the output table
+    t_out = ""
     for elem in word:
         if elem.lower().startswith("data"):
             t_out = elem[5:].strip()
           
     #Loop that retrieves the input table
+    t_in = ""
     for elem in word:
         if elem.lower().startswith("set"):
             t_in = elem[4:].strip()
-       
-    if t_out and t_in in locals():        
-        if t_out != t_in:
-            resultat = t_out + "=" + t_in + ".copy()\n"
-            flag=1
+     
+           
+    if t_out != t_in:
+        resultat = t_out + "=" + t_in + ".copy()\n"
+        flag=1
     
     for elem in word:
         elem2 = elem.lower()
