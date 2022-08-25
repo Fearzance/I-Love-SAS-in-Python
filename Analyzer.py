@@ -79,7 +79,6 @@ def where(elem,i):
     return resultat
 
 
-
 #---------------------------------#
 #         SAS FUNCTIONS           #
 #---------------------------------#
@@ -118,18 +117,6 @@ def up_low(elem):
     return resultat
 
 #-------PUT and INPUT
-def put(elem):
-    put_contains = elem.split("=")
-    new_var = put_contains[0].strip()
-    put = put_contains[1].strip()
-    put = re.split("[()]",put)
-    old_var = put[1].strip()
-    old_var = old_var.split(",")
-    old_var = old_var[0]
-    resultat = ""
-    resultat += t_out + "['" + new_var + "']=" +t_in2+"['" + old_var + "'].astype(str)"
-    return resultat
-
 def in_put(elem):
     put_contains = elem.split("=")
     new_var = put_contains[0].strip()
@@ -138,31 +125,34 @@ def in_put(elem):
     old_var = put[1].strip()
     old_var = old_var.split(",")
     old_var = old_var[0]
-    resultat = ""
-    resultat += t_out + "['" + new_var + "']=" +t_in2+"['" + old_var + "'].astype(int)"
+    resultat = t_out + "['" + new_var + "']=" + t_in2 + "['" + old_var + "']"
+    if "put(" in elem2: 
+        resultat += ".astype(str)"
+    elif "þ(" in elem2:
+        resultat +=  ".astype(int)" 
     return resultat
+
 
 SAS_FUNCT = {
     "substr(":substr,
     "lowcase(":up_low,
     "upcase(":up_low ,
-    "put(":put,
-    "þ": in_put
+    "put(":in_put,
+    "þ(":in_put,
     }
 
+#----------------------------------#
+#               PROC               #
+#----------------------------------#
 
 #-------PROC MEANS
 def proc_means(elem):
-    global resultat
-
-    if var_class:
-        
+    if var_class:        
         resultat = table + ".groupby('" + var_class + "')" +"[['"+ "','".join(var_means)+"']]"+".describe()"
-        if "nmiss" in elem:
+        if "nmiss" in elem.lower():
             resultat += "\n" + "nmiss=" + table + "[['"+ "','".join(var_means)+"']]"+ '.isnull().sum()' + "\n" + "print(nmiss)"
         return resultat
-    else :
-        
+    else :        
         resultat = table +"[['"+ "','".join(var_means)+"']]" + ".describe()"
         if "nmiss" in elem.lower():
             resultat += "\n" + "nmiss=" + table + "[['"+ "','".join(var_means)+"']]"+ '.isnull().sum()' + "\n" + "print(nmiss)"
@@ -172,11 +162,8 @@ def proc_means(elem):
 def proc_freq(elem):
     global resultat
     
-    if "*" not  in var_freq:
-        
-        resultat = "datax =" + table +"['" +var_freq +"']" +".value_counts(dropna = False)" +"\n" + "datay = pandas.DataFrame({'"+var_freq + "': datax.index, 'Frequency': datax.values,'Percent': ((datax.values/datax.values.sum())*100).round(2),'Cumulative Frequency': datax.values.cumsum(),'Cumulative Percent': ((datax.values.cumsum()/datax.values.sum())*100).round(2)})"
-        return resultat
-        
+    if "*" not  in var_freq:        
+        resultat = "datax =" + table +"['" +var_freq +"']" +".value_counts(dropna = False)" +"\n" + "datay = pandas.DataFrame({'"+var_freq + "': datax.index, 'Frequency': datax.values,'Percent': ((datax.values/datax.values.sum())*100).round(2),'Cumulative Frequency': datax.values.cumsum(),'Cumulative Percent': ((datax.values.cumsum()/datax.values.sum())*100).round(2)})"                
     else:
         cross_var = var_freq.split("*")
         resultat = """
@@ -196,56 +183,52 @@ def frequency(ds, vars):
         return df
             """
         resultat += "\n" +"frequency(" + table + ",['"+ "','".join(cross_var) + "'])" 
-        return resultat
-    
+    return resultat
+
 #---------------------------------#
 #           TRANSLATOR            #
 #---------------------------------#
-def translator(code): 
+def translator(code):
+    #For DATA STEP
     global t_in
     global t_in2
     global t_out
     global elem2
-    
-    #Input table for PROC STEP
+    #For PROC STEP
     global table
     global var_means
-    global var_class
-    
+    global var_class    
     global var_freq    
-    
+                                        #-------------#
+                                        #  DATA STEP  #
+                                        #-------------#
+    t_in = ''
+    t_out = ''
     resultat = ''
     flag = 0
-    code = code.replace("input","þ")
+    code = re.sub("input|INPUT|Input","þ",code)
     word = code.split(";")
     
     #Separate the code into list 
     for i in range(0,len(word)):
         word[i] = word[i].strip()
     
-    #Loop that retrieves the output table
-    t_out = ""
+    #Loop that retrieves the output table and input table
     for elem in word:
         if elem.lower().startswith("data"):
             t_out = elem[5:].strip()
-          
-    #Loop that retrieves the input table
-    t_in = ""
-    for elem in word:
         if elem.lower().startswith("set"):
             t_in = elem[4:].strip()
-     
-           
+      
     if t_out != t_in:
         resultat = t_out + "=" + t_in + ".copy()\n"
         flag=1
-    
+        
     for elem in word:
         elem2 = elem.lower()
         #Show python code for each statements
         for stat in STATEMENTS:
             if elem2.startswith(stat):
-                #
                 if flag == 0:
                     flag = 1
                     t_in2 = t_in
@@ -271,11 +254,14 @@ def translator(code):
                     t_in2 = t_out 
                     
                 resultat += val(elem) + "\n"
-   
-    #For PROC STEP
+        
+                                        #-------------#
+                                        #  PROC STEP  #
+                                        #-------------#
     #Name of table
+    var_class = []
     for elem in word:
-        if elem.startswith("proc"):
+        if elem.lower().startswith("proc"):
             name_table = " ".join(elem.split())
             name_table = name_table.split("=")
             name_table = name_table[-1]
@@ -284,40 +270,30 @@ def translator(code):
                 table = table.replace("nmiss"," ")
                 table = table.strip()
         #List of var for proc means
-        for elem in word:
-            if elem.startswith("var"):
-                var = elem[3:]
-                var_means = var.strip()
-                var_means = var_means.split(" ")
-        #List of var for option class        
-        for elem in word:
-            if elem.startswith("class"):  
-                var = elem[5:]
-                var_class = var.strip()
-            else:
-                var_class = []
+            for elem in word:
+                if elem.lower().startswith("var"):
+                    var = elem[3:]
+                    var_means = var.strip()
+                    var_means = var_means.split(" ")
+            #List of var for option class        
+            for elem in word:
+                
+                if elem.lower().startswith("class"):  
+                    var = elem[5:]
+                    var_class = var.strip()
                 
         #List of var for proc freq        
         for elem in word:
-            if elem.startswith("table"):
+            if elem.lower().startswith("table"):
                 var = elem[5:]
                 var_freq = var.strip()
                 
     #Add in result    
     for elem in word:
-        if elem.startswith("proc means"):
+        if elem.lower().startswith("proc means"):
             resultat += proc_means(elem) + "\n"
-   
-    for elem in word:
-        if elem.startswith("proc freq"):
+        if elem.lower().startswith("proc freq"):
             resultat += proc_freq(elem) + "\n"
-            
+
     return resultat
 
-print(translator(""" 
-                 proc means data = yoi ;
-                 var age taille ;
-                 run ;
-                 
-                 """))
-                 
