@@ -1,2 +1,0 @@
-Lien vers l'interface en ligne :
-https://27609.gradio.app/
